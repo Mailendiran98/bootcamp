@@ -1,0 +1,4 @@
+
+# Ignore skills folder
+skills/
+.DS_Store

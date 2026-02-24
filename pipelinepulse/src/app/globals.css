@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter);
+  --color-background: #05050f;
+  --color-foreground: #ffffff;
+  --color-primary: #8b5cf6; /* Violet */
+  --color-secondary: #ec4899; /* Pink */
+  
+  --color-surface-50: rgba(255, 255, 255, 0.03);
+  --color-surface-100: rgba(255, 255, 255, 0.05);
+  --color-surface-200: rgba(255, 255, 255, 0.1);
+}
+
+:root {
+  --background: #05050f;
+  --foreground: #ffffff;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom utility for the glowing background */
+.bg-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 800px;
+  background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.15) 0%, rgba(5, 5, 15, 0) 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Gradient text utility */
+.text-gradient {
+  background: linear-gradient(to right, #ffffff, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Starfield Animations */
+@keyframes animStar {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-2000px); }
+}
+.animate-stars-slow { animation: animStar 50s linear infinite; }
+.animate-stars-medium { animation: animStar 30s linear infinite; }
+.animate-stars-fast { animation: animStar 15s linear infinite; }
