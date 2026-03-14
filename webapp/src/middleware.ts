@@ -38,13 +38,17 @@ export async function middleware(request: NextRequest) {
 
   const isAuthPage =
     request.nextUrl.pathname === "/login" ||
-    request.nextUrl.pathname === "/signup";
+    request.nextUrl.pathname === "/signup" ||
+    request.nextUrl.pathname === "/forgot-password";
+  const isResetPasswordPage = request.nextUrl.pathname === "/reset-password";
   const isApiRoute = request.nextUrl.pathname.startsWith("/api/");
 
-  if (!session && !isAuthPage && !isApiRoute) {
+  // Allow unauthenticated access to auth pages, reset password, and API routes
+  if (!session && !isAuthPage && !isResetPasswordPage && !isApiRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  // Redirect logged-in users away from login/signup/forgot — but NOT from reset-password
   if (session && isAuthPage) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }

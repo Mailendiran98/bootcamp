@@ -7,6 +7,8 @@ Personal learning repository.
 ## 🚀 Projects
 
 ### [PipelinePulse](./pipelinepulse)
+**🔗 Live Demo:** [https://pipelinepulse.vercel.app](https://pipelinepulse.vercel.app)
+
 **PipelinePulse** is a modern SaaS landing page built as part of this learning repository. It is designed as a simple, business-friendly dashboard to monitor data pipeline health, data freshness, and SLA compliance across modern data stacks (Snowflake, Databricks, Airflow, dbt).
 
 **Tech Stack:**

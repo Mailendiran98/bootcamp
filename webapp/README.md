@@ -2,6 +2,8 @@
 
 A lightweight SaaS platform for monitoring data pipeline health, freshness, and SLA compliance. Built with Next.js, Tailwind CSS, and Supabase.
 
+**🔗 Live Demo:** [https://pipelinepulse.vercel.app](https://pipelinepulse.vercel.app)
+
 ## 🚀 Setup Instructions
 
 ### 1. Database Setup (Supabase)
