@@ -34,11 +34,16 @@ export default function SignupPage() {
       return;
     }
 
-    // If identities array is empty, user already exists
+    // If identities array is empty, user already exists (confirmed or unconfirmed)
+    // Resend the confirmation email so unconfirmed users can still verify
     if (data.user && data.user.identities && data.user.identities.length === 0) {
-      setError("An account with this email already exists. Please sign in.");
-      setLoading(false);
-      return;
+      await supabase.auth.resend({
+        type: "signup",
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback?type=signup`,
+        },
+      });
     }
 
     setConfirmationSent(true);
