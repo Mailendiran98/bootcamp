@@ -36,6 +36,7 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
+  const isLandingPage = request.nextUrl.pathname === "/";
   const isAuthPage =
     request.nextUrl.pathname === "/login" ||
     request.nextUrl.pathname === "/signup" ||
@@ -43,12 +44,12 @@ export async function middleware(request: NextRequest) {
   const isResetPasswordPage = request.nextUrl.pathname === "/reset-password";
   const isApiRoute = request.nextUrl.pathname.startsWith("/api/");
 
-  // Allow unauthenticated access to auth pages, reset password, and API routes
-  if (!session && !isAuthPage && !isResetPasswordPage && !isApiRoute) {
+  // Allow unauthenticated access to landing, auth pages, reset password, and API routes
+  if (!session && !isLandingPage && !isAuthPage && !isResetPasswordPage && !isApiRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Redirect logged-in users away from login/signup/forgot — but NOT from reset-password
+  // Redirect logged-in users away from login/signup/forgot — but NOT from landing or reset-password
   if (session && isAuthPage) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
