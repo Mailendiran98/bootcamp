@@ -1,6 +1,6 @@
 import AppShell from "@/components/layout/AppShell";
 
-export default function PipelinesLayout({
+export default function AppLayout({
   children,
 }: {
   children: React.ReactNode;
