@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase-client";
+import { CheckCircle2 } from "lucide-react";
 
 export default function SignupPage() {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [confirmationSent, setConfirmationSent] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,11 +19,12 @@ export default function SignupPage() {
     setLoading(true);
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { name },
+        emailRedirectTo: `${window.location.origin}/login`,
       },
     });
 
@@ -33,8 +34,15 @@ export default function SignupPage() {
       return;
     }
 
-    router.push("/dashboard");
-    router.refresh();
+    // If identities array is empty, user already exists
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+      setError("An account with this email already exists. Please sign in.");
+      setLoading(false);
+      return;
+    }
+
+    setConfirmationSent(true);
+    setLoading(false);
   };
 
   return (
@@ -50,6 +58,24 @@ export default function SignupPage() {
           <p className="mt-1 text-sm text-gray-500">Start monitoring your pipelines</p>
         </div>
 
+        {confirmationSent ? (
+          <div className="card space-y-5">
+            <div className="flex flex-col items-center text-center">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                <CheckCircle2 className="h-6 w-6 text-green-600" />
+              </div>
+              <h2 className="text-lg font-semibold text-gray-900">Check your email</h2>
+              <p className="mt-2 text-sm text-gray-500">
+                We&apos;ve sent a confirmation link to <strong className="text-gray-700">{email}</strong>. Click the link in the email to verify your account before signing in.
+              </p>
+            </div>
+            <p className="text-center text-sm text-gray-500">
+              <Link href="/login" className="font-medium text-brand-600 hover:text-brand-500">
+                Go to sign in
+              </Link>
+            </p>
+          </div>
+        ) : (
         <form onSubmit={handleSignup} className="card space-y-5">
           {error && (
             <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
@@ -113,6 +139,7 @@ export default function SignupPage() {
             </Link>
           </p>
         </form>
+        )}
       </div>
     </div>
   );
